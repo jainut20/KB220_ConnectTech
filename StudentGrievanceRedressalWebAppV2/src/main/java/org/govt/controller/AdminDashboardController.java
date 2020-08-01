@@ -62,6 +62,15 @@ public class AdminDashboardController extends HttpServlet{
             Response response = invocationBuilder.get();
 
             List<Grievance> listOfGrievances = response.readEntity(new GenericType<List<Grievance>>(){});
+            
+            webTarget = client.target(DBConfig.getApiHost()).path("keywords");
+            invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+
+            List<Keyword> listOfKeywords = response.readEntity(new GenericType<List<Keyword>>(){});
+            
+            List<Grievance> listOfSpamGrievances = new ArrayList<Grievance>();
+            List<Keyword> listOfSpamKeywords = new ArrayList<Keyword>();
 
             webTarget = client.target(DBConfig.getApiHost()).path("activities");
             invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
@@ -72,8 +81,27 @@ public class AdminDashboardController extends HttpServlet{
             System.out.println(response.getStatus());
             for (Iterator<Grievance> i = listOfGrievances.iterator(); i.hasNext();) {
                 Grievance g = i.next();
+                int flag = 0;
                 if(g.getComplaintIsSolved() == 0) {
                     pendings++;
+                    if(g.getComplaintIsSpam() == 1) {
+                        listOfSpamGrievances.add(g);
+                        String finalListOfKeywords = "<strong>";
+                        int count = 0;
+                        for (Iterator<Keyword> k = listOfKeywords.iterator(); k.hasNext();) {
+                            Keyword key = k.next();
+                            if(key.getComplaintId().equals(g.getComplaintId())) {
+                                if(count == 0)
+                                    finalListOfKeywords += key.getKeywordName()+"</strong>";
+                                else 
+                                    finalListOfKeywords += "<strong> | " + key.getKeywordName() + "</strong>";
+                                count = 1;
+                            }
+                        }
+                        Keyword finalKeyword = new Keyword();
+                        finalKeyword.setKeywordName(finalListOfKeywords);
+                        listOfSpamKeywords.add(finalKeyword);
+                    }
                 }
                 else {
                     solved++;
@@ -92,10 +120,20 @@ public class AdminDashboardController extends HttpServlet{
                     unverifiedCommittees.add(com);
                 }
             }
+            
+            webTarget = client.target(DBConfig.getApiHost()).path("categories");
+            invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+
+            List<Category> listOfCategories = response.readEntity(new GenericType<List<Category>>(){});
+            hs.setAttribute("categories", listOfCategories);
+            
             hs.setAttribute("unverified", unverifiedCommittees);
             hs.setAttribute("pendings", pendings);
             hs.setAttribute("solved", solved);
             hs.setAttribute("total", pendings+solved);
+            hs.setAttribute("spamGrievances", listOfSpamGrievances);
+            hs.setAttribute("spamKeywords", listOfSpamKeywords);
         }
         catch (Exception e) {
             resp.sendRedirect("index.jsp");

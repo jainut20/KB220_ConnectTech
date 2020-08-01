@@ -77,6 +77,7 @@ public class CommitteeDashboardController extends HttpServlet{
         
         List<Activity> listOfActivities = response.readEntity(new GenericType<List<Activity>>(){});
         
+        List<Grievance> listofSpamGrievances = new ArrayList<Grievance>();
         List<Grievance> listofCommitteeGrievances = new ArrayList<Grievance>();
         List<Keyword> listofCommitteeKeywords = new ArrayList<Keyword>();
         List<Grievance> listofForwardedGrievances = new ArrayList<Grievance>();
@@ -98,34 +99,39 @@ public class CommitteeDashboardController extends HttpServlet{
             int flag = 0;
             if(g.getComplaintCommitteeId().equals(ac.getCommitteeDetails().getCommitteeId())) {
                 if(g.getComplaintIsSolved() == 0) {
-                    for (Iterator<Activity> m = listOfActivities.iterator(); m.hasNext();) {
-                        Activity activity = m.next();
-                        if((activity.getActivityType().equals("forward") || activity.getActivityType().equals("escalate")) && activity.getActivityFrom().equals(g.getComplaintCommitteeId()) && activity.getComplaintId().equals(g.getComplaintId())) {
-                            flag = 1;
-                            break;
+                    if(g.getComplaintIsSpam() == 0) {
+                        for (Iterator<Activity> m = listOfActivities.iterator(); m.hasNext();) {
+                            Activity activity = m.next();
+                            if((activity.getActivityType().equals("forward") || activity.getActivityType().equals("escalate")) && activity.getActivityFrom().equals(g.getComplaintCommitteeId()) && activity.getComplaintId().equals(g.getComplaintId())) {
+                                flag = 1;
+                                break;
+                            }
                         }
-                    }
-                    if(flag == 0) {
-                        listofCommitteeGrievances.add(g);
-                        pendings++;
-                    }
-                    else
-                        continue;
-                    String finalListOfKeywords = "<strong>";
-                    int count = 0;
-                    for (Iterator<Keyword> k = listOfKeywords.iterator(); k.hasNext();) {
-                        Keyword key = k.next();
-                        if(key.getComplaintId().equals(g.getComplaintId())) {
-                            if(count == 0)
-                                finalListOfKeywords += key.getKeywordName()+"</strong>";
-                            else 
-                                finalListOfKeywords += "<strong> | " + key.getKeywordName() + "</strong>";
-                            count = 1;
+                        if(flag == 0) {
+                            listofCommitteeGrievances.add(g);
+                            pendings++;
                         }
+                        else
+                            continue;
+                        String finalListOfKeywords = "<strong>";
+                        int count = 0;
+                        for (Iterator<Keyword> k = listOfKeywords.iterator(); k.hasNext();) {
+                            Keyword key = k.next();
+                            if(key.getComplaintId().equals(g.getComplaintId())) {
+                                if(count == 0)
+                                    finalListOfKeywords += key.getKeywordName()+"</strong>";
+                                else 
+                                    finalListOfKeywords += "<strong> | " + key.getKeywordName() + "</strong>";
+                                count = 1;
+                            }
+                        }
+                        Keyword finalKeyword = new Keyword();
+                        finalKeyword.setKeywordName(finalListOfKeywords);
+                        listofCommitteeKeywords.add(finalKeyword);
                     }
-                    Keyword finalKeyword = new Keyword();
-                    finalKeyword.setKeywordName(finalListOfKeywords);
-                    listofCommitteeKeywords.add(finalKeyword);
+                    else {
+                        listofSpamGrievances.add(g);
+                    }
                 }
                 else {
                     for (Iterator<Activity> m = listOfActivities.iterator(); m.hasNext();) {
@@ -147,6 +153,7 @@ public class CommitteeDashboardController extends HttpServlet{
         hs.setAttribute("pendingGrievances", listofCommitteeGrievances);
         hs.setAttribute("pendingKeywords", listofCommitteeKeywords);
         hs.setAttribute("solvedGrievances", listofSolvedGrievances);
+        hs.setAttribute("spamGrievances", listofSpamGrievances);
         
         for (Iterator<Grievance> i = listOfGrievances.iterator(); i.hasNext();) {
             Grievance g = i.next();

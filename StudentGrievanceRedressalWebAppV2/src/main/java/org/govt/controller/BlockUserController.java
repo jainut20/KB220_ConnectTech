@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.logging.LoggingFeature;
 import org.govt.model.Activity;
+import org.govt.model.AuthenticatedAdmin;
 import org.govt.model.AuthenticatedCommittee;
 import org.govt.model.Email;
 import org.govt.model.Grievance;
@@ -43,7 +44,7 @@ public class BlockUserController extends HttpServlet{
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession hs = req.getSession();
-        AuthenticatedCommittee ac = (AuthenticatedCommittee)hs.getAttribute("user");
+        AuthenticatedAdmin ac = (AuthenticatedAdmin)hs.getAttribute("user");
         
         Client client = ClientBuilder.newClient( new ClientConfig().register( LoggingFeature.class ) );
         
@@ -66,9 +67,9 @@ public class BlockUserController extends HttpServlet{
             }
             if(flag == 0) {
                 Activity a = new Activity();
-                a.setActivityFrom(ac.getCommitteeDetails().getCommitteeId());
+                a.setActivityFrom(gr.getComplaintCommitteeId());
                 a.setActivityTo(gr.getComplaintStudentId());
-                a.setActivityComment(req.getParameter("blockedComments"));
+                a.setActivityComment(req.getParameter("finalComments"));
                 a.setActivityType("solve");
                 a.setComplaintId(gr.getComplaintId());
                 client = ClientBuilder.newClient( new ClientConfig().register( LoggingFeature.class ) );
@@ -85,13 +86,12 @@ public class BlockUserController extends HttpServlet{
                 invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
                 response = invocationBuilder.get();
                 Student s = response.readEntity(Student.class);
-                s.setInstituteId(ac.getCommitteeDetails().getCommitteeId());
                 webTarget = client.target(DBConfig.getApiHost()).path("students/block");
                 invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
                 response = invocationBuilder.post(Entity.entity(s, MediaType.APPLICATION_JSON));
                 st = response.readEntity(Status.class);
                 Email e = new Email();
-                e.setActivityFrom(ac.getCommitteeDetails().getCommitteeName());
+                e.setActivityFrom(ac.getAdminDetails().getAdminName());
                 e.setG(gr);
                 e.setSubject("User Blocked");
                 e.setTitle("Your were blocked. Reason: "+a.getActivityComment());
@@ -99,7 +99,7 @@ public class BlockUserController extends HttpServlet{
                 webTarget = client.target(DBConfig.getApiHost()).path("additional/email");
                 invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
                 response = invocationBuilder.post(Entity.entity(e, MediaType.APPLICATION_JSON));
-                resp.sendRedirect("committee-dashboard.jsp");   
+                resp.sendRedirect("admin-dashboard.jsp");   
             }
         }
     }

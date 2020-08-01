@@ -66,7 +66,7 @@
                     </div>
                     <div class= "mb-3">
                     <c:if test="${user.committeeDetails.committeeType=='inst' && param.complaintType!='solved'}">
-                          <a href="#" data-toggle="modal" data-target="#blockUser" class="btn btn-secondary">Block User (only if this complaint is spam)</a>    
+                          <a href="#" data-toggle="modal" data-target="#markAsSpam" class="btn btn-secondary">Mark This Complaint As Spam</a>    
                     </c:if>
                     </div>
                 </div>
@@ -272,7 +272,7 @@
             </div>
                             
             <c:if test="${user.committeeDetails.committeeType=='inst' && param.complaintType!='solved'}">
-                <div class="modal bd-example-modal-lg fade" id="blockUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal bd-example-modal-lg fade" id="markAsSpam" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -282,12 +282,12 @@
                         </button>
                       </div>
                         <div class="modal-body">
-                            <form id="blockUser" action="BlockUserController" method="post"> 
+                            <form id="markAsSpam" action="MarkAsSpamController" method="post"> 
                               <div class="form-group">
                                 <label for="exampleSolve">Please State Your Reason</label>
-                                <textarea class="form-control" id="exampleSolve" rows="3" name="blockedComments"></textarea>
+                                <textarea class="form-control" id="exampleSolve" rows="3" name="markAsSpamComments"></textarea>
                               </div>
-                              <h5>Are You Sure You Want To Block This User?</h5>
+                              <h5>Are You Sure You Want To Mark This Complaint As Spam? Administration will take a final decision on this complaint.</h5>
                               <button type="submit" class="btn btn-danger btn-block">Yes</button>
                               <button type="button" class="btn btn-success btn-block" data-dismiss="modal">No</button>
                           </form>

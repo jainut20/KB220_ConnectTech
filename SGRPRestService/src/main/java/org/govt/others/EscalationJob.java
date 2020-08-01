@@ -39,7 +39,7 @@ public class EscalationJob implements Runnable{
         List<Grievance> grievances = gr.getGrievances();
         for(Iterator<Grievance> g = grievances.iterator(); g.hasNext();) {
             Grievance grievance = g.next();
-            if(grievance.getComplaintIsSolved() == 0) {
+            if(grievance.getComplaintIsSolved() == 0 && grievance.getComplaintIsSpam() == 0) {
                 if(grievance.getDaysElapsed() <= 6) {
                     grievance.setDaysElapsed(grievance.getDaysElapsed() + 1);
                     Status st = gr.daysElapsed(grievance);

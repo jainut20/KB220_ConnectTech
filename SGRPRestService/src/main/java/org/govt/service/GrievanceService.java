@@ -110,6 +110,15 @@ public class GrievanceService {
     }
     
     @POST
+    @Path("spam")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON) 
+    public Status isSpam(Grievance g) {
+        Status st = gr.isSpam(g);
+        return st;
+    }
+    
+    @POST
     @Path("check/spam")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON) 

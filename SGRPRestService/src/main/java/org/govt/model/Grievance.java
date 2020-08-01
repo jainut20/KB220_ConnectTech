@@ -26,9 +26,7 @@ public class Grievance {
     private String feedbackComment;
     private int complaintIsDelayed;
     private String imageUrl;
-    
-    
-    
+    private int complaintIsSpam;  
 
     public String getComplaintId() {
         return complaintId;
@@ -156,6 +154,14 @@ public class Grievance {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public int getComplaintIsSpam() {
+        return complaintIsSpam;
+    }
+
+    public void setComplaintIsSpam(int complaintIsSpam) {
+        this.complaintIsSpam = complaintIsSpam;
     }
 
 }

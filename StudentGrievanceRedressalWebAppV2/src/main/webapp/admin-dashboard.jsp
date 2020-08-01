@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <!DOCTYPE html>
 <html>
     <jsp:include page="/AdminDashboard"/>
@@ -68,7 +69,7 @@
                         <div class="tabs">
                             <button data-tab="tab1" class="active"><strong><i class="fa fa-chart-bar fa-lg pr-3"></i>Portal Statistics</strong><span></span></button>
                             <button data-tab="tab3"><strong><i class="fas fa-university fa-lg pr-3"></i>Verify Universities</strong><span></span></button>
-                            <button data-tab="tab2"><strong><i class="fas fa-user-lock fa-lg pr-3"></i>Register A New Admin</strong><span></span></button>
+                            <button data-tab="tab2"><strong><i class="fas fa-user-lock fa-lg pr-3"></i>Manage Spam Grievances</strong><span></span></button>
                             <button data-tab="tab4"><strong><i class="fa fa-id-card fa-lg pr-3"></i>Your Profile</strong><span></span></button>
                             <button class="empty"></button>
                         </div>
@@ -77,12 +78,69 @@
                                         <div class="ux-text">
                                                 <h2><i class="fas fa-chart-pie pr-3"></i>Statistics of Complaints</h2>
                                                 <div id="piechart_3d" style="width: 800px; height: 300px; text-align: left;"></div>
+                                                <p>For more detailed statistics: <a href="https://public.tableau.com/profile/sakshi.chheda#!/vizhome/KB220_SIH2020/COVER" target="_blank">Click Here</a></p>
                                         </div>
                                 </div>
                             
                                 <div data-tab="tab2" class="tabcontent">
                                         <div class="ux-text">
-                                                <h2><i class="fas fa-users-cog pr-3"></i>Register A New Admin</h2>
+                                            <h2><i class="fas fa-user-clock pr-3"></i>List of Spam Grievances</h2>
+                                                <div class="mb-3 mt-3 row">
+                                                    <div class="col-4"><input type="text" class="form-control" id="filterInput" onkeyup="searchFunction()" placeholder="Search for keywords.." title="Type in a keyword"></div>
+                                                    <div class="col-8">
+                                                        <div class="dropdown">
+                                                            <label class="mr-2">Filter By Category: </label>
+                                                            <select class="form-control" name="level" onchange="changeCategory(this.value, 'spamGrievances')">
+                                                                <option value="dropdown" selected disabled>Categories List</option>
+                                                                <sql:setDataSource driver="com.mysql.cj.jdbc.Driver" 
+                                                                                   url="jdbc:mysql://sihdb.c3vyqhzl6aif.us-east-1.rds.amazonaws.com:3306/sgradb"
+                                                                                   user="sihadmin"
+                                                                                   password="sihdb123"
+                                                                                   var="con"
+                                                                                   />
+                                                                <sql:query dataSource="${con}" var="data">
+                                                                    select * from grievance_category
+                                                                </sql:query>
+                                                                    <option value="All">All</option>
+                                                                <c:forEach items="${data.rows}" var="row">
+                                                                    <option value="${row.category_name}">${row.category_name}</option>
+                                                                </c:forEach>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-bordered" id="spamGrievances">
+                                                    <thead>
+                                                      <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Complaint Title</th>
+                                                        <th scope="col">Complaint Category</th>
+                                                        <th scope="col">Keywords</th>
+                                                        <th scope="col">Actions</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${spamGrievances}" var="spamGrievance" varStatus="loop">
+                                                        <c:if test="${spamGrievance.complaintIsRedFlag==1}">
+                                                            <tr style="background-color: #ffcccb">
+                                                        </c:if>
+                                                        <c:if test="${spamGrievance.complaintIsRedFlag==0}">
+                                                            <tr>
+                                                        </c:if>
+                                                                <th scope="row">${loop.index+1}</th>
+                                                                <td>${spamGrievance.complaintTitle}</td>
+                                                                <td>${categories[spamGrievance.categoryId - 1].categoryName}</td>
+                                                                <td>${spamKeywords[loop.index].keywordName}</td>
+                                                                <td><a href="spam-grievance.jsp?complaintId=${spamGrievance.complaintId}" target="_blank" class="btn btn-success" style="color: white;">Take Action</a></td>
+                                                            </tr>
+                                                      </c:forEach>
+                                                      <tfoot>
+                                                        <tr>
+                                                          <td colspan="5" class="text-center">Data retrieved from Complaint Database.</td>
+                                                        </tr>
+                                                      </tfoot>
+                                                    </tbody>
+                                                </table>
                                         </div>
                                 </div>
                             

@@ -162,6 +162,9 @@
                             </c:if>
                             <button data-tab="tab2"><strong><i class="fas fa-share fa-lg pr-3"></i>Forwarded Grievances</strong><span></span></button>
                             <button data-tab="tab8"><strong><i class="fas fa-arrow-up fa-lg pr-3"></i>Escalated Grievances</strong><span></span></button>
+                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                <button data-tab="tab9"><strong><i class="fas fa-user-graduate fa-lg pr-3"></i>Spam Grievances</strong><span></span></button>
+                            </c:if>
                             <button data-tab="tab6"><strong><i class="fas fa-check fa-lg pr-3"></i>Solved Grievances</strong><span></span></button>
                                 <c:if test="${user.committeeDetails.committeeType=='univ'}">
                                     <button data-tab="tab3"><strong><i class="fas fa-university fa-lg pr-3"></i>Verify Institutes</strong><span></span></button>
@@ -662,6 +665,50 @@
                                                 </c:if>
                                         </div>
                                 </div>
+                                <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                <div data-tab="tab9" class="tabcontent">
+                                        <div class="ux-text">
+                                                <h2><i class="fas fa-paper-plane pr-3"></i>List of Spam Grievances</h2>
+                                                <table class="table table-bordered" id="forwardedGrievances">
+                                                    <thead>
+                                                      <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Complaint Title</th>
+                                                        <th scope="col">Complaint Category</th>
+                                                        <th scope="col">Forwarded To</th>
+                                                        <th scope="col">Status</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${spamGrievances}" var="spam" varStatus="loop">
+                                                        <c:if test="${spam.complaintIsSolved==1}">
+                                                            <tr style="background-color: #90ee90">
+                                                        </c:if>
+                                                        <c:if test="${spam.complaintIsSolved==0}">
+                                                            <tr>
+                                                        </c:if>
+                                                            <th scope="row">${loop.index+1}</th>
+                                                            <td>${spam.complaintTitle}</td>
+                                                            <td>${categories[spam.categoryId - 1].categoryName}</td>
+                                                            <td>Admin</td>
+                                                            <c:if test="${spam.complaintIsSolved==1}">
+                                                                <td>Approved</td>
+                                                            </c:if>
+                                                            <c:if test="${spam.complaintIsSolved==0}">
+                                                                <td>Pending</td>
+                                                            </c:if>
+                                                        </tr>
+                                                      </c:forEach>
+                                                      <tfoot>
+                                                        <tr>
+                                                          <td colspan="5" class="text-center">Data retrieved from Complaint Database.</td>
+                                                        </tr>
+                                                      </tfoot>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                </div>
+                                </c:if>
                         </div>
                 </div>
         </div>

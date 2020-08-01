@@ -1,1 +1,6 @@
 /StudentGrievanceRedressalWebAppV2/target/
+/SGRPRestService/target/
+/SGRPRestService/model-bin/
+/SGRPRestService/res/
+/SGRPRestService/src/main/java/org/govt/configs
+/SGRPRestService/src/main/java/org/govt/model/Email.java

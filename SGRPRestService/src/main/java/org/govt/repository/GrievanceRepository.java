@@ -62,6 +62,7 @@ public class GrievanceRepository {
                 g.setFeedbackComment(rs.getString("feedback_comment"));
                 g.setImageUrl(rs.getString("image_url"));
                 g.setComplaintIsDelayed(rs.getInt("complaint_isdelayed"));
+                g.setComplaintIsSpam(rs.getInt("complaint_isspam"));
                 grievances.add(g);
             }
             con.close();
@@ -97,6 +98,7 @@ public class GrievanceRepository {
                 g.setFeedbackComment(rs.getString("feedback_comment"));
                 g.setImageUrl(rs.getString("image_url"));
                 g.setComplaintIsDelayed(rs.getInt("complaint_isdelayed"));
+                g.setComplaintIsSpam(rs.getInt("complaint_isspam"));
             }
             con.close();
         } catch (Exception e) {
@@ -504,4 +506,29 @@ public class GrievanceRepository {
         }
         return st;
     }
+    
+    public Status isSpam(Grievance g) {
+        Status st = null;
+        Grievance grievance = getGrievance(g.getComplaintId());
+        if(grievance.getComplaintIsSolved() == 0) {
+            try {
+                Connection con = DBConfig.getConnection();
+                PreparedStatement ps = con.prepareStatement("update grievances set complaint_isspam=? where complaint_id=?");
+                ps.setInt(1, g.getComplaintIsSpam());
+                ps.setString(2, g.getComplaintId());
+                ps.executeUpdate();
+                st = new Status();
+                st.setStatus(1);
+                con.close();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        else {
+            st = new Status();
+            st.setStatus(-5); // Complaint Solved
+        }
+        return st;
+    }
+    
 }
