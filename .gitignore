@@ -4,3 +4,4 @@
 /SGRPRestService/res/
 /SGRPRestService/src/main/java/org/govt/configs
 /SGRPRestService/src/main/java/org/govt/model/Email.java
+/SGRPRestService/src/main/java/org/govt/model/RegistrationEmail.java

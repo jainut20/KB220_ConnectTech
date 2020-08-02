@@ -359,6 +359,97 @@
                                 <div data-tab="tab3" class="tabcontent">
                                         <div class="ux-text">
                                             <c:if test="${user.committeeDetails.committeeType=='univ'}">
+                                                <h2><i class="fas fa-sitemap pr-3"></i>List Of Verified Institutes</h2>
+                                            </c:if>
+                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                <h2 class="mb-4"><i class="fa fa-graduation-cap pr-3"></i>List Of Verified Students<a href="#" class="btn btn-success float-right" data-toggle="modal" data-target="#addAccounts"><i class="fas fa-plus pr-3"></i>Create New Accounts</a></h2>
+                                            </c:if>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                      <tr>
+                                                        <th scope="col">#</th>
+                                                        <c:if test="${user.committeeDetails.committeeType=='univ'}">
+                                                            <th scope="col">Institute ID</th>
+                                                            <th scope="col">Institute Name</th>
+                                                            <th scope="col">Institute Email</th>
+                                                            <th scope="col">Actions</th>
+                                                        </c:if>
+                                                        <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                            <th scope="col">Student Unique ID</th>
+                                                            <th scope="col">Student Name</th>
+                                                            <th scope="col">Student Email</th>
+                                                            <th scope="col">Actions</th>
+                                                        </c:if>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${verified}" var="verified" varStatus="loop">
+                                                        <tr>
+                                                            <th scope="row">${loop.index+1}</td>
+                                                            <c:if test="${user.committeeDetails.committeeType=='univ'}">
+                                                                <td>${verified.committeeId}</td>
+                                                                <td>${verified.committeeName}</td>
+                                                                <td>${verified.committeeEmail}</td>
+                                                                <td>Verified</td>
+                                                            </c:if>
+                                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                                <td>${verified.studentUID}</td>
+                                                                <td>${verified.studentFirstName} ${verified.studentMiddleName} ${verified.studentLastName} </td>
+                                                                <td>${verified.studentEmail}</td>
+                                                                <td>Verified</td>
+                                                            </c:if>
+                                                        </tr>
+                                                      </c:forEach>
+                                                      <tfoot>
+                                                        <tr>
+                                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                                <td colspan="5" class="text-center">Data retrieved from Student Database.</td>
+                                                            </c:if>
+                                                            <c:if test="${user.committeeDetails.committeeType=='univ'}">
+                                                                <td colspan="5" class="text-center">Data retrieved from Committee Database.</td>
+                                                            </c:if>
+                                                        </tr>
+                                                      </tfoot>
+                                                    </tbody>
+                                                </table>
+                                                <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                    <h2><i class="fa fa-graduation-cap pr-3"></i>List Of Blocked Students</h2>
+                                                </c:if>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                      <tr>
+                                                        <th scope="col">#</th>
+                                                        <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                            <th scope="col">Student Unique ID</th>
+                                                            <th scope="col">Student Name</th>
+                                                            <th scope="col">Student Email</th>
+                                                            <th scope="col">Actions</th>
+                                                        </c:if>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${blocked}" var="block" varStatus="loop">
+                                                        <tr>
+                                                            <th scope="row">${loop.index+1}</th>
+                                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                                <td>${block.studentUID}</td>
+                                                                <td>${block.studentFirstName} ${block.studentMiddleName} ${block.studentLastName} </td>
+                                                                <td>${block.studentEmail}</td>
+                                                                <td><a class="btn btn-success" style="color: white;" id="${block.studentId}"><i class="fa fa-check pr-2"></i>Un-block</a></td>
+                                                            </c:if>
+                                                        </tr>
+                                                      </c:forEach>
+                                                      <tfoot>
+                                                        <tr>
+                                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
+                                                                <td colspan="5" class="text-center">Data retrieved from Student Database.</td>
+                                                            </c:if>
+                                                        </tr>
+                                                      </tfoot>
+                                                    </tbody>
+                                                </table>
+                                                    
+                                            <c:if test="${user.committeeDetails.committeeType=='univ'}">
                                                 <h2><i class="fas fa-sitemap pr-3"></i>List Of Unverified Institutes</h2>
                                             </c:if>
                                             <c:if test="${user.committeeDetails.committeeType=='inst'}">
@@ -407,42 +498,6 @@
                                                             </c:if>
                                                             <c:if test="${user.committeeDetails.committeeType=='univ'}">
                                                                 <td colspan="5" class="text-center">Data retrieved from Committee Database.</td>
-                                                            </c:if>
-                                                        </tr>
-                                                      </tfoot>
-                                                    </tbody>
-                                                </table>
-                                                <c:if test="${user.committeeDetails.committeeType=='inst'}">
-                                                    <h2><i class="fa fa-graduation-cap pr-3"></i>List Of Blocked Students</h2>
-                                                </c:if>
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                      <tr>
-                                                        <th scope="col">#</th>
-                                                        <c:if test="${user.committeeDetails.committeeType=='inst'}">
-                                                            <th scope="col">Student Unique ID</th>
-                                                            <th scope="col">Student Name</th>
-                                                            <th scope="col">Student Email</th>
-                                                            <th scope="col">Actions</th>
-                                                        </c:if>
-                                                      </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <c:forEach items="${blocked}" var="block" varStatus="loop">
-                                                        <tr>
-                                                            <th scope="row">${loop.index+1}</th>
-                                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
-                                                                <td>${block.studentUID}</td>
-                                                                <td>${block.studentFirstName} ${block.studentMiddleName} ${block.studentLastName} </td>
-                                                                <td>${block.studentEmail}</td>
-                                                                <td><a class="btn btn-success" style="color: white;" id="${block.studentId}"><i class="fa fa-check pr-2"></i>Un-block</a></td>
-                                                            </c:if>
-                                                        </tr>
-                                                      </c:forEach>
-                                                      <tfoot>
-                                                        <tr>
-                                                            <c:if test="${user.committeeDetails.committeeType=='inst'}">
-                                                                <td colspan="5" class="text-center">Data retrieved from Student Database.</td>
                                                             </c:if>
                                                         </tr>
                                                       </tfoot>
@@ -522,6 +577,31 @@
                                                 <div class="form-group">
                                                   <label for="cName">Course Name</label>
                                                   <input type="text" id="cName" class="form-control" aria-describedby="emailHelp" placeholder="Enter Course Name">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal fade" id="addAccounts" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLongTitle">Add New Accounts</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                          </button>
+                                        </div>
+                                          <div class="modal-body" id="addCourseModalBody">
+                                            <form action="AddAccountsController" id="addAccountsForm" method="post" enctype="multipart/form-data"> 
+                                                <div class="form-group">
+                                                  <label for="fileName">Please Select A File</label>
+                                                  <input type="file" id="fileName" class="form-control" name="excelFile" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">
                                                 </div>
                                                 <button type="submit" class="btn btn-primary">Submit</button>
                                             </form>

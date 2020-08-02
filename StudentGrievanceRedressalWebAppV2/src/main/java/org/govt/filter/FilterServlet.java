@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebFilter(urlPatterns = {"/committee-dashboard.jsp", "/solve-grievance.jsp", "/admin-dashboard.jsp"})
+@WebFilter(urlPatterns = {"/committee-dashboard.jsp", "/solve-grievance.jsp", "/admin-dashboard.jsp", "/spam-grievance.jsp"})
 public class FilterServlet implements Filter{
 
     @Override

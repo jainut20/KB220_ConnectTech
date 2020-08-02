@@ -1,8 +1,10 @@
 org\govt\model\Status.class
 org\govt\repository\ActivityRepository.class
 org\govt\repository\ResponseRepository.class
-org\govt\configs\TestClass$1.class
+org\govt\model\RegistrationEmail.class
+org\govt\model\RegistrationEmail$1.class
 org\govt\model\AuthenticatedAdmin.class
+org\govt\repository\FAQRepository.class
 org\govt\service\ActivityService.class
 org\govt\model\Committee.class
 org\govt\service\StudentService.class
@@ -13,6 +15,7 @@ org\govt\model\Email$1.class
 org\govt\repository\GrievanceRepository.class
 org\govt\service\CategoryService.class
 org\govt\model\Response.class
+org\govt\model\FAQs.class
 org\govt\model\Grievance.class
 org\govt\model\User.class
 org\govt\repository\CommitteeRepository.class
@@ -29,6 +32,7 @@ org\govt\others\BackgroundJobManager.class
 org\govt\model\Admin.class
 org\govt\others\SendMailsServlet$1.class
 org\govt\model\Activity.class
+org\govt\service\AdditionalServices$2.class
 org\govt\service\ResponseService.class
 org\govt\configs\TestClass.class
 org\govt\service\GrievanceService.class
@@ -47,3 +51,4 @@ org\govt\others\SendMailsServlet.class
 org\govt\model\Email.class
 org\govt\repository\PropertyRepository.class
 org\govt\repository\StudentRepository.class
+org\govt\service\FAQService.class

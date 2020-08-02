@@ -365,11 +365,15 @@ public class CommitteeDashboardController extends HttpServlet{
             response = invocationBuilder.get();
             List<Student> listOfStudents = response.readEntity(new GenericType<List<Student>>(){});
             List<Student> unverifiedStudents = new ArrayList<Student>();
+            List<Student> verifiedStudents = new ArrayList<Student>();
             List<Student> blockedStudents = new ArrayList<Student>();
             for (Iterator<Student> s = listOfStudents.iterator(); s.hasNext();) {
                 Student stud = s.next();
                 if(stud.getInstituteId().equals(ac.getCommitteeDetails().getCommitteeId()) && stud.getIsVerified() == 0) {
                     unverifiedStudents.add(stud);
+                }
+                if(stud.getInstituteId().equals(ac.getCommitteeDetails().getCommitteeId()) && stud.getIsVerified() == 1) {
+                    verifiedStudents.add(stud);
                 }
                 if(stud.getInstituteId().equals(ac.getCommitteeDetails().getCommitteeId()) && stud.getIsActive() == 0) {
                     blockedStudents.add(stud);
@@ -377,6 +381,7 @@ public class CommitteeDashboardController extends HttpServlet{
             }
             hs.setAttribute("unverified", unverifiedStudents);
             hs.setAttribute("blocked", blockedStudents);
+            hs.setAttribute("verified", verifiedStudents);
             client = ClientBuilder.newClient( new ClientConfig().register( LoggingFeature.class ) );
             webTarget = client.target(DBConfig.getApiHost()).path("courses");
             invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
@@ -398,13 +403,18 @@ public class CommitteeDashboardController extends HttpServlet{
             response = invocationBuilder.get();
             List<Committee> listOfCommittees = response.readEntity(new GenericType<List<Committee>>(){});
             List<Committee> unverifiedCommittees = new ArrayList<Committee>();
+            List<Committee> verifiedCommittees = new ArrayList<Committee>();
             for (Iterator<Committee> c = listOfCommittees.iterator(); c.hasNext();) {
                 Committee com = c.next();
                 if(com.getParentId().equals(ac.getCommitteeDetails().getCommitteeId()) && com.getIsVerified() == 0) {
                     unverifiedCommittees.add(com);
                 }
+                if(com.getParentId().equals(ac.getCommitteeDetails().getCommitteeId()) && com.getIsVerified() == 1) {
+                    verifiedCommittees.add(com);
+                }
             }
             hs.setAttribute("unverified", unverifiedCommittees);
+            hs.setAttribute("verified", verifiedCommittees);
         }
         
         webTarget = client.target(DBConfig.getApiHost()).path("categories");

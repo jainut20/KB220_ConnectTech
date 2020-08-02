@@ -18,6 +18,7 @@ import org.govt.model.Activity;
 import org.govt.model.Committee;
 import org.govt.model.Email;
 import org.govt.model.NameById;
+import org.govt.model.RegistrationEmail;
 import org.govt.model.Student;
 import org.govt.repository.CommitteeRepository;
 import org.govt.repository.StudentRepository;
@@ -54,6 +55,26 @@ public class AdditionalServices {
     @Path("email")
     @Produces(MediaType.APPLICATION_JSON) 
     public String SendEmail(final Email e) throws Exception {
+        String st;
+        Thread t1 = new Thread(){
+            @Override
+            public void run() {
+                try {
+                    e.sendEmail();
+                } catch (Exception ex) {
+                    Logger.getLogger(AdditionalServices.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } 
+        };
+        t1.start();
+        st = "Sending Mail";
+        return st;
+    }
+    
+    @POST
+    @Path("registration-email")
+    @Produces(MediaType.APPLICATION_JSON) 
+    public String SendStaticEmail(final RegistrationEmail e) throws Exception {
         String st;
         Thread t1 = new Thread(){
             @Override

@@ -29,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -110,20 +111,22 @@ public class TestClass {
 //                String SentDetecURL = "resources/model-bin/en-sent.bin"; // The path to your sentence detection model
                 RakeAlgorithm rakeAlg = new RakeAlgorithm(params, POStaggerURL, SentDetecURL);
 //                // Call the rake method
-                String txt = "How to harassment the exam fees? Also i am been ragged at Sardar Patel Institute of Technology";
+                String txt = "Not able to give exams because of covid";
                 Result result = rakeAlg.rake(txt);
 //                // Print the result
                 System.out.println(result.distinct());
                 String keywords = result.toString().substring(1, result.toString().length() -1);
                 String[] words = keywords.split(", ");
+                String line = "exams | covid";
                 for(int i = 0; i < words.length; i++) {
                     String word = words[i].replaceAll("\\s\\(.*?\\) ?", "");
                     System.out.println(word+"\n");
+                    System.out.println(line.toLowerCase().contains(word.toLowerCase()));
                 }
                 System.out.println(keywords);
                 
                 BufferedReader br = new BufferedReader(new FileReader("res/stopwords-terrier.txt"));
-                String line;
+//                String line;
                 while((line = br.readLine()) != null) {
 //                    System.out.println(line);
 //                    System.out.println(txt.contains(line));
@@ -143,7 +146,7 @@ public class TestClass {
 //            File file = new File(fileUrl.toURI());
 //            String grandParent = file.getParentFile().getParent();
 //            System.out.println(grandParent+"/model-bin/en-pos-maxent.bin");
-            String txt = "Guns   on last bench";
+//            String txt = "Guns   on last bench";
 //            File RedFlags = new File("res/stopwords-terrier.txt");
 //             BufferedReader br = new BufferedReader(new FileReader(RedFlags));
 //            String line;
@@ -159,48 +162,70 @@ public class TestClass {
 //            if(flag == 0) {
 //                System.out.println("NO");
 //            }
-               Pattern pattern = Pattern.compile("\\s\\s\\s");
-                Matcher matcher = pattern.matcher(txt);
-                boolean found = matcher.find();
-                if(found) {
-                    System.out.println("found");
-                }
-                String[] words = txt.split("\\s+");
-                for (int i = 0; i < words.length; i++) {
-                    // You may want to check for a non-word character before blindly
-                    // performing a replacement
-                    // It may also be necessary to adjust the character class
-                    words[i] = words[i].replaceAll("[^\\w]", "");
-                    System.out.println(words[i].length());
-                }
-                System.out.println("=============mail===========");
-		final String username = "stockalertsystem12@gmail.com";
-                final String password = "ggWp@123";	
-		
-                Properties props = new Properties();
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.host", "smtp.gmail.com");
-		props.put("mail.smtp.port", "587");
-		
-                Session session = Session.getInstance(props, new javax.mail.Authenticator() {
-                  protected PasswordAuthentication getPasswordAuthentication() {
-                          return new PasswordAuthentication(username, password);	
-                  }
-		});
+//               Pattern pattern = Pattern.compile("\\s\\s\\s");
+//                Matcher matcher = pattern.matcher(txt);
+//                boolean found = matcher.find();
+//                if(found) {
+//                    System.out.println("found");
+//                }
+//                String[] words = txt.split("\\s+");
+//                for (int i = 0; i < words.length; i++) {
+//                    // You may want to check for a non-word character before blindly
+//                    // performing a replacement
+//                    // It may also be necessary to adjust the character class
+//                    words[i] = words[i].replaceAll("[^\\w]", "");
+//                    System.out.println(words[i].length());
+//                }
+//                System.out.println("=============mail===========");
+//		final String username = "stockalertsystem12@gmail.com";
+//                final String password = "ggWp@123";	
+//		
+//                Properties props = new Properties();
+//		props.put("mail.smtp.starttls.enable", "true");
+//		props.put("mail.smtp.auth", "true");
+//		props.put("mail.smtp.host", "smtp.gmail.com");
+//		props.put("mail.smtp.port", "587");
+//		
+//                Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+//                  protected PasswordAuthentication getPasswordAuthentication() {
+//                          return new PasswordAuthentication(username, password);	
+//                  }
+//		});
+//
+//                Message message = new MimeMessage(session);
+//		message.setFrom(new InternetAddress(username, "Student Grievance Redressal Portal"));
+//		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("praveshganwani@gmail.com"));
+//		message.setSubject("Demo");
+//		message.setContent(
+//              "<h1>This is actual message embedded in HTML tags</h1>",
+//             "text/html");
+//
+//                Transport.send(message);
+//                
+//		System.out.println("Alerts sent");
+            System.out.println(randomPasswordGenerator());
+            System.out.println(randomPasswordGenerator());
+            System.out.println(randomPasswordGenerator());
 
-                Message message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(username, "Student Grievance Redressal Portal"));
-		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("praveshganwani@gmail.com"));
-		message.setSubject("Demo");
-		message.setContent(
-              "<h1>This is actual message embedded in HTML tags</h1>",
-             "text/html");
-
-                Transport.send(message);
-                
-		System.out.println("Alerts sent");
-            
     }
     
+    public static String randomPasswordGenerator() {
+        int len = 10;
+        
+        // ASCII range - alphanumeric (0-9, a-z, A-Z)
+        final String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@!#$%&";
+
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder();
+
+        // each iteration of loop choose a character randomly from the given ASCII range
+        // and append it to StringBuilder instance
+
+        for (int i = 0; i < len; i++) {
+                int randomIndex = random.nextInt(chars.length());
+                sb.append(chars.charAt(randomIndex));
+        }
+
+        return sb.toString();
+    }
 }

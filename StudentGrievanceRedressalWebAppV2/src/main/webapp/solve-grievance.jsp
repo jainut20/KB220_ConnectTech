@@ -261,6 +261,10 @@
                                 <label for="exampleSolve">Send Final Comments</label>
                                 <textarea class="form-control" id="exampleSolve" rows="3" name="solvedComments"></textarea>
                               </div>
+                              <div class="form-group form-check">
+                                <input type="checkbox" class="form-check-input" name="faq" id="exampleCheck1">
+                                <label class="form-check-label" for="exampleCheck1">Mark As FAQ</label>
+                              </div>
                               <button type="submit" class="btn btn-primary">Mark as Solved</button>
                           </form>
                       </div>

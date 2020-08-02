@@ -20,6 +20,7 @@ import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -27,6 +28,7 @@ import java.util.regex.Pattern;
 import org.govt.configs.DBConfig;
 import org.govt.model.Category;
 import org.govt.model.Committee;
+import org.govt.model.FAQs;
 import org.govt.model.Grievance;
 import org.govt.model.Keyword;
 import org.govt.model.Status;
@@ -141,6 +143,49 @@ public class GrievanceRepository {
         st = new Status();
         st.setStatus(1);
         return st;
+    }
+    
+    public FAQs checkForFaq(Grievance g) {
+        FAQs finalFaq = null;
+        try {
+            String[] stopWords = new SmartWords().getSmartWords(); 
+            String[] stopPOS = {"VB", "VBD", "VBG", "VBN", "VBP", "VBZ"}; 
+            int minWordChar = 1;
+            boolean shouldStem = true;
+            String phraseDelims = "[-,.?():;\"!/]"; 
+            RakeParams params = new RakeParams(stopWords, stopPOS, minWordChar, shouldStem, phraseDelims);
+            
+            ClassLoader classLoader = getClass().getClassLoader();
+            File POSFile = new File(classLoader.getResource("/model-bin/en-pos-maxent.bin").getFile());
+            File SentDetecFile = new File(classLoader.getResource("/model-bin/en-sent.bin").getFile());
+            String POStaggerURL = POSFile.getAbsolutePath(); // The path to your POS tagging model
+            String SentDetecURL = SentDetecFile.getAbsolutePath(); // The path to your sentence detection model
+            RakeAlgorithm rakeAlg = new RakeAlgorithm(params, POStaggerURL, SentDetecURL);
+            // Call the rake method
+            String txt = g.getComplaintDetail();
+            Result result = rakeAlg.rake(txt);
+            // Print the result
+            System.out.println(result.distinct());
+            String keywords = result.toString().substring(1, result.toString().length() -1);
+            String[] words = keywords.split(", ");
+            FAQRepository fr = new FAQRepository();
+            List<FAQs> listOfFaqs = fr.getFAQ(g.getComplaintCommitteeId());
+            int[] count = {0,0,0,0,0,0,0,0,0};
+            for(int i = 0; i < words.length; i++) {
+                String word = words[i].replaceAll("\\s\\(.*?\\) ?", "");
+                System.out.println(word+"\n");
+                for(Iterator<FAQs> f = listOfFaqs.iterator(); f.hasNext();) {
+                    FAQs faq = f.next();
+                    if(faq.getFaqKeywords().toLowerCase().contains(word.toLowerCase())) {
+                        finalFaq = faq;
+                        return finalFaq;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return finalFaq;
     }
     
     public Category checkForCategory(Grievance g) {

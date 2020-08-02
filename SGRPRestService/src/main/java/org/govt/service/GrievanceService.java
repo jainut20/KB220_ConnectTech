@@ -15,8 +15,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.govt.model.Category;
+import org.govt.model.FAQs;
 import org.govt.model.Grievance;
 import org.govt.model.Status;
+import org.govt.repository.FAQRepository;
 import org.govt.repository.GrievanceRepository;
 
 /**
@@ -125,6 +127,15 @@ public class GrievanceService {
     public Status checkForSpam(Grievance g) {
         Status st = gr.checkForSpam(g);
         return st;
+    }
+    
+    @POST
+    @Path("check/faq")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON) 
+    public FAQs checkForFaq(Grievance g) {
+        FAQs f = gr.checkForFaq(g);
+        return f;
     }
     
     @POST

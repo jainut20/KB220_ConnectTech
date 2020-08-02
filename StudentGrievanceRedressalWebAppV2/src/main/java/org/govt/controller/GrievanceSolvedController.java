@@ -31,6 +31,9 @@ import org.govt.model.Status;
 import org.govt.model.Student;
 import org.govt.others.DBConfig;
 import org.govt.model.Email;
+import org.govt.model.FAQs;
+import org.govt.model.Keyword;
+import org.jsoup.Jsoup;
 
 /**
  *
@@ -40,6 +43,10 @@ import org.govt.model.Email;
 @WebServlet("/GrievanceSolvedController")
 public class GrievanceSolvedController extends HttpServlet{
 
+    public static String html2text(String html) {
+        return Jsoup.parse(html).text();
+    }
+    
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession hs = req.getSession();
@@ -48,11 +55,13 @@ public class GrievanceSolvedController extends HttpServlet{
         Client client = ClientBuilder.newClient( new ClientConfig().register( LoggingFeature.class ) );
         
         Grievance gr = (Grievance)hs.getAttribute("complaintDetails");
+        Keyword k = (Keyword)hs.getAttribute("complaintKeywords");
         
         WebTarget webTarget = client.target(DBConfig.getApiHost()).path("activities/activity/"+gr.getComplaintId());
         Invocation.Builder invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
         Response response = invocationBuilder.get();
-        
+        String faq = req.getParameter("faq");
+        System.out.println(faq);
         List<Activity> listOfActivities = response.readEntity(new GenericType<List<Activity>>(){});
         
         if(ac != null) {
@@ -94,6 +103,19 @@ public class GrievanceSolvedController extends HttpServlet{
                 webTarget = client.target(DBConfig.getApiHost()).path("additional/email");
                 invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
                 response = invocationBuilder.post(Entity.entity(e, MediaType.APPLICATION_JSON));
+                
+                if(faq != null) {
+                    FAQs f = new FAQs();
+                    f.setFaqTitle(gr.getComplaintTitle());
+                    f.setFaqDetails(gr.getComplaintDetail());
+                    f.setFaqKeywords(html2text(k.getKeywordName()));
+                    f.setFaqComment(req.getParameter("solvedComments"));
+                    f.setCommitteeId(ac.getCommitteeDetails().getCommitteeId());
+                    webTarget = client.target(DBConfig.getApiHost()).path("faqs/faq");
+                    invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+                    response = invocationBuilder.post(Entity.entity(f, MediaType.APPLICATION_JSON));
+                }
+                
                 resp.sendRedirect("committee-dashboard.jsp");   
             }
         }

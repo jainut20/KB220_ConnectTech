@@ -16,11 +16,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import org.govt.model.Activity;
-import org.govt.model.Grievance;
-import org.govt.model.Student;
-
-
 
 public class Email 
 {
@@ -599,7 +594,7 @@ public class Email
                 return "sent";
 //		System.out.println("Alerts sent to "+to);
     }
-
+    
     public String getTo() {
         return to;
     }
