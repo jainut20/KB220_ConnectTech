@@ -23,6 +23,7 @@ export class LodgeComplaintPage implements OnInit {
   Categories = []
   plt: any
   Student: Student = {}
+  FindFaq: any
   base64Image
   constructor(private web: WebrequestService, private register: RegistrationService, public platform: Platform, private router: Router, private alert: AlertController, private camera: Camera, public imageProvider: ImageServiceService) { }
 
@@ -73,6 +74,42 @@ export class LodgeComplaintPage implements OnInit {
       console.log(err)
     }
   }
+
+  /*************************Check FAQs*********************************************/
+
+  async CheckFaq() {
+    await this.web.post('grievances/check/faq', { complaintDetail: this.grievance.complaintDetail, complaintCommitteeId: this.Student.instituteId }).toPromise().then(async (res: any) => {
+      this.FindFaq = res
+    })
+
+  }
+
+  /*********************ASK FOR CONFIRMATIoN */
+
+  async confirmation() {
+    let alert = await this.alert.create({
+      header: 'Same Question found in FAQs',
+      message: `Complaint Question: ${this.FindFaq.faqDetails} ?  Complaint Answer : ${this.FindFaq.faqComment} . \n Do you still want to lodge the complaint ?`,
+      buttons: [
+        {
+          text: 'Yes',
+          role: 'Submit',
+          handler: () => {
+            this.PushComplaint()
+          }
+        },
+        {
+          text: 'No',
+          handler: () => {
+            Notiflix.Notify.Warning('Complaint not pushed. You can check FAQs page.')
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  /**********************************************Lodging Complaint**********************************/
   async LodgeComplaint() {
     try {
       Notiflix.Loading.Standard();
@@ -86,32 +123,13 @@ export class LodgeComplaintPage implements OnInit {
       else if (this.grievance.complaintDetail && this.grievance.complaintTitle && this.grievance.categoryId && (this.grievance.complaintIsAnonymous == 0 || this.grievance.complaintIsAnonymous == 1)) {
         let isActive = await this.register.Isactive(this.Student.studentId)
         if (isActive) {
-          await this.submitForm();
-          if (this.imageSet)
-            this.grievance.imageUrl = 'https://sih2020complaints.s3.amazonaws.com/' + this.itemPicturesStoreURL
-          else
-            this.grievance.imageUrl = ''
-        
-          this.web.post('grievances/grievance', this.grievance).subscribe((res: any) => {
+          await this.CheckFaq();
+          if (this.FindFaq) {
             Notiflix.Loading.Remove();
-            if (res) {
-              if (res.status == 1) {
-                this.showAlert('Sucess', 'Complaint logded successfully.')
-
-                this.grievance = {}
-                this.grievance.complaintStudentId = this.Student.studentId
-                this.imgPreview = null
-                this.imageSet = false
-              }
-              else {
-                this.showAlert('Failed', 'Something Went Wrong.')
-              }
-            }
-            else {
-              Notiflix.Notify.Failure('Server did not responding while posting grievance.')
-            }
-
-          })
+            this.confirmation()
+          } else {
+            this.PushComplaint()
+          }
         }
         else {
           Notiflix.Loading.Remove();
@@ -134,8 +152,37 @@ export class LodgeComplaintPage implements OnInit {
     }
   }
 
+  /***************************************** PUSH COmplaint ***************************/
+  async PushComplaint() {
 
+    console.log('Hello')
+    await this.submitForm();
+    if (this.imageSet)
+      this.grievance.imageUrl = 'https://sih2020complaints.s3.amazonaws.com/' + this.itemPicturesStoreURL
+    else
+      this.grievance.imageUrl = ''
 
+    this.web.post('grievances/grievance', this.grievance).subscribe((res: any) => {
+      Notiflix.Loading.Remove();
+      if (res) {
+        if (res.status == 1) {
+          this.showAlert('Sucess', 'Complaint logded successfully.')
+
+          this.grievance = {}
+          this.grievance.complaintStudentId = this.Student.studentId
+          this.imgPreview = null
+          this.imageSet = false
+        }
+        else {
+          this.showAlert('Failed', 'Something Went Wrong.')
+        }
+      }
+      else {
+        Notiflix.Notify.Failure('Server did not responding while posting grievance.')
+      }
+
+    })
+  }
   FileChange(event) {
     let file = event.target.files[0];
     // let 
