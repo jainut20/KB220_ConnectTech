@@ -22,6 +22,15 @@ public class Student {
     private int isVerified;
     private int isActive;
     private String instituteId;
+    private String studentMobileNo;
+
+    public String getStudentMobileNo() {
+        return studentMobileNo;
+    }
+
+    public void setStudentMobileNo(String studentMobileNo) {
+        this.studentMobileNo = studentMobileNo;
+    }
 
     public String getStudentFirstName() {
         return studentFirstName;

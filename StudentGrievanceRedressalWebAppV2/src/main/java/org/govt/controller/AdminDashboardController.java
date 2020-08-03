@@ -29,6 +29,7 @@ import org.govt.model.AuthenticatedAdmin;
 import org.govt.model.Category;
 import org.govt.model.Committee;
 import org.govt.model.Course;
+import org.govt.model.Feedback;
 import org.govt.model.Grievance;
 import org.govt.model.Keyword;
 import org.govt.model.Student;
@@ -68,6 +69,12 @@ public class AdminDashboardController extends HttpServlet{
             response = invocationBuilder.get();
 
             List<Keyword> listOfKeywords = response.readEntity(new GenericType<List<Keyword>>(){});
+            
+            webTarget = client.target(DBConfig.getApiHost()).path("feedbacks");
+            invocationBuilder =  webTarget.request(MediaType.APPLICATION_JSON);
+            response = invocationBuilder.get();
+            
+            List<Feedback> listOfFeedbacks = response.readEntity(new GenericType<List<Feedback>>(){});
             
             List<Grievance> listOfSpamGrievances = new ArrayList<Grievance>();
             List<Keyword> listOfSpamKeywords = new ArrayList<Keyword>();
@@ -134,6 +141,7 @@ public class AdminDashboardController extends HttpServlet{
             hs.setAttribute("total", pendings+solved);
             hs.setAttribute("spamGrievances", listOfSpamGrievances);
             hs.setAttribute("spamKeywords", listOfSpamKeywords);
+            hs.setAttribute("feedbacks", listOfFeedbacks);
         }
         catch (Exception e) {
             resp.sendRedirect("index.jsp");

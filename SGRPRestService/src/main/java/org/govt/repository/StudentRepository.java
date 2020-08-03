@@ -45,6 +45,7 @@ public class StudentRepository {
                 s.setIsVerified(rs.getInt("student_isverified"));
                 s.setIsActive(rs.getInt("student_isactive"));
                 s.setInstituteId(rs.getString("institute_id"));
+                s.setStudentMobileNo(rs.getString("student_mobileno"));
                 students.add(s);
             }
             con.close();
@@ -76,6 +77,7 @@ public class StudentRepository {
                 s.setIsVerified(rs.getInt("student_isverified"));
                 s.setIsActive(rs.getInt("student_isactive"));
                 s.setInstituteId(rs.getString("institute_id"));
+                s.setStudentMobileNo(rs.getString("student_mobileno"));
             }
             con.close();
         } catch (Exception e) {
@@ -127,7 +129,7 @@ public class StudentRepository {
             randomNumber = randomNumber*totalRows*23;
             String finalId = "STUD" + randomNumber + randomCharacters;
             s.setStudentId(finalId);
-            ps = con.prepareStatement("insert into students (student_id, student_first_name, student_middle_name, student_last_name, student_email_id, student_password, student_uid, course_id, student_reg_datetime, student_isverified, student_isactive, institute_id) values(?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps = con.prepareStatement("insert into students (student_id, student_first_name, student_middle_name, student_last_name, student_email_id, student_password, student_uid, course_id, student_reg_datetime, student_isverified, student_isactive, institute_id, student_mobileno) values(?,?,?,?,?,?,?,?,?,?,?,?,?)");
             ps.setString(1, s.getStudentId());
             ps.setString(2, s.getStudentFirstName());
             ps.setString(3, s.getStudentMiddleName());
@@ -140,6 +142,7 @@ public class StudentRepository {
             ps.setInt(10, s.getIsVerified());
             ps.setInt(11, s.getIsActive());
             ps.setString(12, s.getInstituteId());
+            ps.setString(13, s.getStudentMobileNo());
             ps.executeUpdate();
             st = new Status();
             st.setStatus(1);

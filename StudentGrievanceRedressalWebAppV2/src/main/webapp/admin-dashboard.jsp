@@ -70,6 +70,7 @@
                             <button data-tab="tab1" class="active"><strong><i class="fa fa-chart-bar fa-lg pr-3"></i>Portal Statistics</strong><span></span></button>
                             <button data-tab="tab3"><strong><i class="fas fa-university fa-lg pr-3"></i>Verify Universities</strong><span></span></button>
                             <button data-tab="tab2"><strong><i class="fas fa-user-lock fa-lg pr-3"></i>Manage Spam Grievances</strong><span></span></button>
+                            <button data-tab="tab5"><strong><i class="fas fa-user-lock fa-lg pr-3"></i>Portal Feedbacks</strong><span></span></button>
                             <button data-tab="tab4"><strong><i class="fa fa-id-card fa-lg pr-3"></i>Your Profile</strong><span></span></button>
                             <button class="empty"></button>
                         </div>
@@ -197,9 +198,61 @@
                                                   </table>
                                         </div>
                                 </div>
+                                                      
+                                <div data-tab="tab5" class="tabcontent">
+                                        <div class="ux-text">
+                                                <h2><i class="fas fa-sitemap pr-3"></i>List Of Portal Feedback</h2>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                      <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col">Feedback From</th>
+                                                        <th scope="col">Email</th>
+                                                        <th scope="col">Actions</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <c:forEach items="${feedbacks}" var="feedback" varStatus="loop">
+                                                        <tr>
+                                                            <th scope="row">${loop.index+1}</th>
+                                                            <td>${feedback.name}</td>
+                                                            <td>${feedback.email}</td>
+                                                            <td><a class="btn btn-success" style="color: white;" data-toggle="modal" data-target="#feedback_${loop.index+1}"">See Feedback</a></td>
+                                                        </tr>
+                                                      </c:forEach>
+                                                      <tfoot>
+                                                        <tr>
+                                                            <td colspan="5" class="text-center">Data retrieved from Feedback Database.</td>
+                                                        </tr>
+                                                      </tfoot>
+                                                    </tbody>
+                                                </table>
+                                        </div>
+                                </div>
                         </div>
                 </div>
         </div>
+        <c:forEach items="${feedbacks}" var="feedback" varStatus="loop">
+            <div class="modal fade" id="feedback_${loop.index+1}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Feedback Details</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <h4 class="card-subtitle mb-2">Feedback Comments:</h4>
+                      <p class="card-text pl-2 pr-2 pt-3 pb-3 alert alert-secondary">${feedback.feedback}</p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </c:forEach>
         <!-- partial -->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
         <script src='https://cdnjs.cloudflare.com/ajax/libs/animejs/2.2.0/anime.min.js'></script>

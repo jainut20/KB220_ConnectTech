@@ -58,7 +58,7 @@
                     <a class="nav-link" href="#"><i class="fas fa-globe-asia pr-2"></i>About Us</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-user-cog pr-2"></i>How It Works</a>
+                    <a class="nav-link" href="contact-us.jsp"><i class="fas fa-user-cog pr-2"></i>Contact Us</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fas fa-clipboard-list pr-2"></i>Notices</a>

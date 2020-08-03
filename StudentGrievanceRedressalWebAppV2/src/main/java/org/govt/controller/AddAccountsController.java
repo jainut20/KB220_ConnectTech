@@ -134,6 +134,11 @@ public class AddAccountsController extends HttpServlet{
                             s.setCourseId(Integer.parseInt(cellValue));
                             break;
                         }
+                        case 7:
+                        {
+                            s.setStudentMobileNo(cellValue);
+                            break;
+                        }
                     }
                 }
                 s.setStudentPassword(randomPasswordGenerator());

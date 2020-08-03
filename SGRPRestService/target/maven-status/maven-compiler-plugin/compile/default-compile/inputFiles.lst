@@ -8,8 +8,11 @@ D:\SGRPRestService\src\main\java\org\govt\model\Properties.java
 D:\SGRPRestService\src\main\java\org\govt\others\SendMailsServlet.java
 D:\SGRPRestService\src\main\java\org\govt\service\AdditionalServices.java
 D:\SGRPRestService\src\main\java\org\govt\repository\CommitteeRepository.java
+D:\SGRPRestService\src\main\java\org\govt\model\Feedback.java
 D:\SGRPRestService\src\main\java\org\govt\repository\CourseRepository.java
+D:\SGRPRestService\src\main\java\org\govt\service\FeedbackService.java
 D:\SGRPRestService\src\main\java\org\govt\service\StudentService.java
+D:\SGRPRestService\src\main\java\org\govt\model\OTP.java
 D:\SGRPRestService\src\main\java\org\govt\filters\CORSFilter.java
 D:\SGRPRestService\src\main\java\org\govt\repository\CategoryRepository.java
 D:\SGRPRestService\src\main\java\org\govt\service\ActivityService.java
@@ -17,6 +20,7 @@ D:\SGRPRestService\src\main\java\org\govt\repository\ActivityRepository.java
 D:\SGRPRestService\src\main\java\org\govt\service\CategoryService.java
 D:\SGRPRestService\src\main\java\org\govt\model\FAQs.java
 D:\SGRPRestService\src\main\java\org\govt\service\AdminService.java
+D:\SGRPRestService\src\main\java\org\govt\repository\FeedbackRepository.java
 D:\SGRPRestService\src\main\java\org\govt\service\PropertyService.java
 D:\SGRPRestService\src\main\java\org\govt\model\User.java
 D:\SGRPRestService\src\main\java\org\govt\service\ResponseService.java
