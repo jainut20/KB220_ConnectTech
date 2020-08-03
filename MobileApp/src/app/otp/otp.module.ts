@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LoginPageRoutingModule } from './login-routing.module';
+import { OTPPageRoutingModule } from './otp-routing.module';
 
-import { LoginPage } from './login.page';
+import { OTPPage } from './otp.page';
 import { NgOtpInputModule } from  'ng-otp-input';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { NgOtpInputModule } from  'ng-otp-input';
     CommonModule,
     FormsModule,
     IonicModule,
-    NgOtpInputModule,
-    LoginPageRoutingModule
+    OTPPageRoutingModule,
+    NgOtpInputModule
   ],
-  declarations: [LoginPage]
+  declarations: [OTPPage]
 })
-export class LoginPageModule {}
+export class OTPPageModule {}

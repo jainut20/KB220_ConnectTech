@@ -7,6 +7,7 @@ import { AndroidPermissions } from '@ionic-native/android-permissions/ngx/';
 
 import { Plugins } from '@capacitor/core';
 import Notiflix from "notiflix";
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 
 
 
@@ -16,17 +17,18 @@ import Notiflix from "notiflix";
   styleUrls: ['./login.page.scss'],
 })
 export class LoginPage implements OnInit {
+  fingerprintOptions: any;
 
-  constructor(private router: Router, public zone: NgZone, private alert: AlertController, public platform: Platform, private web: WebrequestService,
-     private user: UserService, private androidPermissions: AndroidPermissions) {
+  constructor(private faio: FingerprintAIO, private router: Router, public zone: NgZone, private alert: AlertController, public platform: Platform, private web: WebrequestService,
+    private user: UserService, private androidPermissions: AndroidPermissions) {
 
   }
-  Email:string
-  Password:string
+  Email: string
+  Password: string
   plt
   data
   showPassword = false;
-  
+
   ngOnInit() {
     this.plt = this.platform.platforms();
     if (this.plt.includes('android')) {
@@ -49,17 +51,42 @@ export class LoginPage implements OnInit {
         let user = { userEmail, userPassword }
         this.web.post('login/student', user).subscribe(async (res: any) => {
           if (res.status == 1) {
-            await Storage.set({
-              key: 'student',
-              value: JSON.stringify(res.studentDetails)
-            });
+           
             Notiflix.Loading.Remove();
-            Notiflix.Notify.Success('Login Successful')
+            Notiflix.Notify.Success('OTP Sent Successfully')
             this.user.setStudent(res.studentDetails)
             this.Email = ''
             this.Password = ''
+            console.log(res.studentDetails.studentMobileNo)
+            this.web.post('additional/otp' , {studentMobileNo : 9930592116}).subscribe((res:any)=>{
+              console.log(res)
+              this.user.setOTP(res.otp)
+              this.router.navigate(['/otp'])
+            })
            
-            this.router.navigate(['/menu'],{replaceUrl:true})
+            // this.fingerprintOptions = {
+            //   clientId: 'fingerprint-Demo',
+            //   clientSecret: 'password', //Only necessary for Android
+            //   disableBackup: true  //Only for Android(optional)
+            // }
+            // if (this.platform.is("android")){
+            //   this.faio.isAvailable().then(result => {
+            //     if (result == 'biometric') {
+            //       this.faio.show(this.fingerprintOptions).then(() => {
+            //         this.router.navigate(['/menu'], { replaceUrl: true })
+            //       }).catch(err => {
+            //         console.log(err)
+            //       })
+            //     }
+            //     else {
+            //       this.router.navigate(['/menu'], { replaceUrl: true })
+            //     }
+            //   })
+            // }
+            // else{
+            //   this.router.navigate(['/menu'], { replaceUrl: true })
+            // }
+
           }
           else if (res.status == -1) {
             Notiflix.Loading.Remove();
@@ -73,7 +100,7 @@ export class LoginPage implements OnInit {
             Notiflix.Loading.Remove();
             this.showAlert('Error', 'Student not registered')
           }
-          else if(res.status == -100){
+          else if (res.status == -100) {
             Notiflix.Loading.Remove();
             this.showAlert('Error', 'You have been blocked.')
           }
@@ -84,15 +111,13 @@ export class LoginPage implements OnInit {
       Notiflix.Loading.Standard();
       this.showAlert('Error', err)
     }
-   
-   
-
 
   }
 
-
-  
-  TogglePassword(){
+  onOtpChange(event) {
+    console.log(event)
+  }
+  TogglePassword() {
     this.showPassword = !this.showPassword
   }
 

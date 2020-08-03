@@ -8,15 +8,21 @@ import { Plugins } from '@capacitor/core';
 export class UserService {
   student:Student 
   Response = []
+  OTP:string
   constructor() { }
 
   setReponse(res){
     this.Response = res
   }
+  setOTP(s){
+    this.OTP=s
+  }
   setStudent(s:Student){
     this.student =s
   }
-
+  getOTP(){
+    return this.OTP
+  }
   getResponse(){
     return this.Response
   }

@@ -1,0 +1,13 @@
+<!-- <ion-header>
+  <ion-toolbar>
+    <ion-title>OTP</ion-title>
+  </ion-toolbar>
+</ion-header> -->
+
+<ion-content>
+    <ion-item style='position: relative; top:35%;'>
+        <ion-label style="text-align: center;">Enter the Otp sent to registered mobile number </ion-label>
+    </ion-item>
+    <ng-otp-input class="Centre" (onInputChange)="onOtpChange($event)" [config]="{length:5}"></ng-otp-input>
+
+</ion-content>

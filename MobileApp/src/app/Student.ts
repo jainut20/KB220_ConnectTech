@@ -13,5 +13,5 @@ export interface Student{
     courseId?:number
     isActive?:number
     isVerified?:number
-
+    studentMobileNo?:number
 }

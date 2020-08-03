@@ -17,15 +17,17 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { DatetimelineDirective } from './datetimeline.directive';
 import { Camera } from '@ionic-native/camera/ngx/';
 import { File } from '@ionic-native/file/ngx';
-
+import {FingerprintAIO} from '@ionic-native/fingerprint-aio/ngx'
 import {ImageServiceService} from './image-service.service'
+import { NgOtpInputModule } from  'ng-otp-input';
+
 library.add(fas);
 
 
 @NgModule({
   declarations: [AppComponent, DatetimelineDirective],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule,FontAwesomeModule],
+  imports: [BrowserModule, IonicModule.forRoot(), NgOtpInputModule,AppRoutingModule,HttpClientModule,FontAwesomeModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -34,6 +36,7 @@ library.add(fas);
     Camera,
     ImageServiceService,
     File,
+    FingerprintAIO,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],

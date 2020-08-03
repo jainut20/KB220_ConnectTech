@@ -4,7 +4,7 @@ import { Student } from 'src/app/Student';
 import { Router } from '@angular/router';
 import { Plugins } from '@capacitor/core';
 import { RegistrationService } from 'src/app/api/registration.service';
-import { NavController } from '@ionic/angular';
+import { NavController, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-profile',
@@ -13,12 +13,12 @@ import { NavController } from '@ionic/angular';
 })
 export class ProfilePage implements OnInit {
 
-  constructor(private user: UserService, private router: Router, private register: RegistrationService,private navCtrl:NavController) { }
+  constructor(private modalCtrl:ModalController,private user: UserService, private router: Router, private register: RegistrationService,private navCtrl:NavController) { }
   student: Student = {}
   InstituteName = ''
   UniversityName = ''
   CourseName = ''
-  ngOnInit() {
+  async ngOnInit() {
     this.navCtrl.navigateRoot("/menu/profile");
     this.user.getStudent().then(data => {
 
